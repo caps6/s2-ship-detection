@@ -11,6 +11,7 @@ import torch
 from datasets import AirbusShipDetection
 from imageutils import draw_image_with_boxes
 from transforms import ToTensor
+from torchvision.ops import nms
 
 # Input folder with images to classify.
 IMAGES_IN = 'sentinel-hub'
