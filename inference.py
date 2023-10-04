@@ -110,9 +110,14 @@ for fn in fn_images:
             tgt_pred = model(x_tensor)
             tgt_pred = tgt_pred[0]
 
-            # Get the boxes and apply the cropping offset.
-            boxes = tgt_pred['boxes'].detach().cpu().numpy()
-            for box in boxes:
+            # Get the boxes and apply the cropping offset + Applying Non-max suppression
+            boxes = tgt_pred['boxes'].detach().cpu()    #I_added
+            scores= tgt_pred['scores'].detach().cpu()   #I_added
+            nms_result = nms(boxes=boxes, scores=scores, iou_threshold=iou_threshold)
+            boxes = boxes.numpy() 
+            boxes_nms = []
+            boxes_nms = [boxes[i] for i in nms_result]
+            for box in boxes_nms:
 
                 # Threshold on area.
                 # Maximum area: 360 * 50 m = 18000 m2 = 180 pixels.
